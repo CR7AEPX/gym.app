@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Мотивация</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+  <style>
+    body {
+      background: #0d0d0d;
+      font-family: 'Montserrat', sans-serif;
+      color: #fff;
+      margin: 0;
+      padding: 20px;
+      padding-bottom: 80px;
+    }
+
+    h1 {
+      text-align: center;
+      color: #00e676;
+      margin-bottom: 20px;
+    }
+
+    .add-block {
+      border: 2px dotted #00e676;
+      border-radius: 16px;
+      width: 100%;
+      max-width: 600px;
+      margin: 0 auto 30px;
+      height: 160px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    .add-block:hover {
+      background: #111;
+    }
+
+    .add-block i {
+      font-size: 40px;
+      color: #00e676;
+    }
+
+    .items {
+      display: grid;
+      gap: 20px;
+      max-width: 700px;
+      margin: 0 auto;
+    }
+
+    .item {
+      background: #1a1a1a;
+      border-radius: 12px;
+      padding: 15px;
+      border: 1px solid #333;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      position: relative;
+    }
+
+    .item img, .item audio {
+      max-width: 100%;
+      border-radius: 8px;
+    }
+
+    .remove-btn {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      background: transparent;
+      border: none;
+      color: rgba(255, 0, 0, 0.674);
+      font-size: 18px;
+      cursor: pointer;
+      border-radius: 8px;
+      padding: 6px;
+      transition: 0.3s ease;
+    }
+
+    .remove-btn:hover {
+      color: #ff5252;
+      background-color: rgba(255, 82, 82, 0.1);
+    }
+
+    @media (max-width: 600px) {
+      .add-block {
+        height: 120px;
+      }
+
+      .add-block i {
+        font-size: 32px;
+      }
+    }
+
+    .app-nav {
+      position: fixed;
+      background: #121212;
+      border-top: 1px solid #222;
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      height: 65px;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      z-index: 999;
+      padding: 0 10px;
+    }
+
+    .app-nav a {
+      text-decoration: none;
+    }
+
+    .nav-btn {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      color: #888;
+      font-size: 0.75rem;
+      transition: all 0.3s ease;
+      cursor: pointer;
+    }
+
+    .nav-btn i {
+      font-size: 1.5rem;
+      margin-bottom: 4px;
+      transition: transform 0.2s ease;
+    }
+
+    .nav-btn:hover,
+    .nav-btn.active {
+      color: #00e676;
+    }
+
+    .nav-btn.active i {
+      transform: scale(1.15);
+    }
+
+    @media (min-width: 768px) {
+      .app-nav {
+        top: 0;
+        bottom: 0;
+        left: 0;
+        width: 80px;
+        height: 100%;
+        flex-direction: column;
+        border-right: 1px solid #222;
+        border-top: none;
+        padding: 20px 0;
+      }
+
+      .nav-btn {
+        margin-bottom: 30px;
+        font-size: 0.7rem;
+      }
+
+      .nav-btn i {
+        font-size: 1.4rem;
+        margin-bottom: 6px;
+      }
+
+      .nav-btn span {
+        font-size: 0.7rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <h1>Мотивация</h1>
+  <div class="add-block" onclick="openFileDialog()">
+    <i class="fa-solid fa-plus"></i>
+  </div>
+  <input type="file" id="fileInput" accept="image/*,audio/*" hidden />
+
+  <div class="items" id="itemsContainer"></div>
+
+  <nav class="app-nav">
+    <a href="index.html"><div class="nav-btn">
+      <i class="fa-solid fa-house"></i>
+      <span>Домой</span>
+    </div></a>
+    <a href="motivation.html"><div class="nav-btn active">
+      <i class="fa-solid fa-image"></i>
+      <span>Мотивация</span>
+    </div></a>
+    <a href="profile.html"><div class="nav-btn">
+      <i class="fa-solid fa-circle-user"></i>
+      <span>Профиль</span>
+    </div></a>
+  </nav>
+
+  <script>
+    const input = document.getElementById("fileInput");
+    const container = document.getElementById("itemsContainer");
+
+    function openFileDialog() {
+      input.click();
+    }
+
+    input.addEventListener("change", () => {
+      const file = input.files[0];
+      if (!file) return;
+
+      const reader = new FileReader();
+      reader.onload = () => {
+        const data = reader.result;
+        const type = file.type.startsWith("image") ? "image" : "audio";
+        const newItem = { type, data };
+        const items = JSON.parse(localStorage.getItem("motivationItems") || "[]");
+        items.push(newItem);
+        localStorage.setItem("motivationItems", JSON.stringify(items));
+        renderItems();
+      };
+      reader.readAsDataURL(file);
+    });
+
+    function renderItems() {
+      container.innerHTML = "";
+      const items = JSON.parse(localStorage.getItem("motivationItems") || "[]");
+      items.slice().reverse().forEach((item, index) => {
+        const el = document.createElement("div");
+        el.className = "item";
+
+        if (item.type === "image") {
+          const img = document.createElement("img");
+          img.src = item.data;
+          el.appendChild(img);
+        } else if (item.type === "audio") {
+          const audio = document.createElement("audio");
+          audio.controls = true;
+          audio.src = item.data;
+          el.appendChild(audio);
+        }
+
+        const removeBtn = document.createElement("button");
+        removeBtn.className = "remove-btn";
+        removeBtn.innerHTML = '<i class="fa-solid fa-trash-can"></i>';
+        removeBtn.onclick = () => {
+          const realIndex = items.length - 1 - index;
+          items.splice(realIndex, 1);
+          localStorage.setItem("motivationItems", JSON.stringify(items));
+          renderItems();
+        };
+        el.appendChild(removeBtn);
+        container.appendChild(el);
+      });
+    }
+
+    window.addEventListener("DOMContentLoaded", renderItems);
+  </script>
+</body>
+</html>

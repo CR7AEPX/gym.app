@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Профиль</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+  <style>
+    body {
+      background: #0d0d0d;
+      color: #fff;
+      font-family: 'Montserrat', sans-serif;
+      padding: 20px;
+      padding-bottom: 80px;
+    }
+
+    h1 {
+      text-align: center;
+      color: #00e676;
+      margin-bottom: 25px;
+    }
+
+    .profile {
+      max-width: 600px;
+      margin: 0 auto;
+      text-align: center;
+    }
+
+    .photo-block {
+      position: relative;
+      width: 140px;
+      height: 140px;
+      margin: 0 auto 15px;
+      border-radius: 50%;
+      overflow: hidden;
+      border: 3px solid #00e676;
+      background: #000;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .photo-block img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border-radius: 50%;
+    }
+
+    .photo-block input {
+      display: none;
+    }
+
+    .photo-block::after {
+      content: '+';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      color: #00e676;
+      font-size: 2.6rem;
+      display: none;
+    }
+
+    .photo-block:hover::after {
+      display: block;
+    }
+
+    .name {
+      font-size: 1.4rem;
+      color: #fff;
+      margin-bottom: 25px;
+      outline: none;
+      border-radius: 8px;
+      padding: 5px 10px;
+      display: inline-block;
+    }
+
+    .stats {
+      background: #181818;
+      padding: 15px;
+      border-radius: 12px;
+      border: 1px solid #333;
+      margin-bottom: 25px;
+      text-align: left;
+    }
+
+    .stats p {
+      margin: 10px 0;
+    }
+
+    .motivation-block {
+      background: #181818;
+      padding: 20px;
+      border-radius: 12px;
+      border: 1px solid #333;
+      line-height: 1.6;
+      color: #ccc;
+      font-size: 0.95rem;
+      white-space: pre-wrap;
+      text-align: left;
+    }
+
+    .app-nav {
+      position: fixed;
+      background: #121212;
+      border-top: 1px solid #222;
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      height: 65px;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      z-index: 999;
+      padding: 0 10px;
+    }
+
+    .app-nav a {
+      text-decoration: none;
+    }
+
+    .nav-btn {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      color: #888;
+      font-size: 0.75rem;
+      transition: all 0.3s ease;
+      cursor: pointer;
+    }
+
+    .nav-btn i {
+      font-size: 1.5rem;
+      margin-bottom: 4px;
+      transition: transform 0.2s ease;
+    }
+
+    .nav-btn:hover,
+    .nav-btn.active {
+      color: #00e676;
+    }
+
+    .nav-btn.active i {
+      transform: scale(1.15);
+    }
+
+    @media (min-width: 768px) {
+      .app-nav {
+        top: 0;
+        bottom: 0;
+        left: 0;
+        width: 80px;
+        height: 100%;
+        flex-direction: column;
+        border-right: 1px solid #222;
+        border-top: none;
+        padding: 20px 0;
+      }
+
+      .nav-btn {
+        margin-bottom: 30px;
+        font-size: 0.7rem;
+      }
+
+      .nav-btn i {
+        font-size: 1.4rem;
+        margin-bottom: 6px;
+      }
+
+      .nav-btn span {
+        font-size: 0.7rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <h1>Профиль</h1>
+
+  <div class="profile">
+    <label class="photo-block">
+      <img id="profilePhoto" src="" alt="Фото профиля" />
+      <input type="file" id="photoInput" accept="image/*" />
+    </label>
+
+    <div id="nameDisplay" class="name" contenteditable="true" spellcheck="false">Ваше имя</div>
+
+    <div class="stats" id="stats">
+      <p>✅ Выполнено тренировок: ...</p>
+      <p>📅 Последняя активность: ...</p>
+    </div>
+
+    <div class="motivation-block">
+Ты живёшь не ради того, чтобы просто быть.
+Ты живёшь, чтобы стать сильнее, глубже, увереннее.
+Ты видел боль, ты знаешь, что такое тьма, но ты решил идти вперёд — не из страха, а из принципа.
+
+Каждый раз, когда ты нажимаешь “Выполнено” — это не просто галочка.
+Это удар по слабости, это шаг против лени, это доказательство себе:
+
+"Я — не случайный человек. Я — человек, который делает."
+
+Ты не строишь тело. Ты строишь стержень.
+С каждым подходом, с каждой каплей пота — ты приближаешься к тому,
+кем хочешь стать: сильным, спокойным, дисциплинированным мужчиной,
+перед которым не устоит ни страх, ни слабость, ни сомнение.
+
+Ты начал. Значит, ты уже другой. Остальное — вопрос времени.
+    </div>
+  </div>
+
+  <nav class="app-nav">
+    <a href="index.html"><div class="nav-btn">
+      <i class="fa-solid fa-house"></i>
+      <span>Домой</span>
+    </div></a>
+    <a href="motivation.html"><div class="nav-btn">
+      <i class="fa-solid fa-image"></i>
+      <span>Мотивация</span>
+    </div></a>
+    <a href="profile.html"><div class="nav-btn active">
+      <i class="fa-solid fa-circle-user"></i>
+      <span>Профиль</span>
+    </div></a>
+  </nav>
+
+  <script>
+    const photoInput = document.getElementById("photoInput");
+    const profilePhoto = document.getElementById("profilePhoto");
+    const nameDisplay = document.getElementById("nameDisplay");
+    const statsEl = document.getElementById("stats");
+
+    window.addEventListener("DOMContentLoaded", () => {
+      const savedPhoto = localStorage.getItem("profilePhoto");
+      if (savedPhoto) profilePhoto.src = savedPhoto;
+
+      const savedName = localStorage.getItem("profileName");
+      if (savedName) nameDisplay.textContent = savedName;
+
+      const log = JSON.parse(localStorage.getItem("log")) || [];
+      const last = log.length ? log[log.length - 1].split(" — ")[0] : "—";
+      statsEl.innerHTML = `
+        <p>✅ Выполнено тренировок: ${log.length}</p>
+        <p>📅 Последняя активность: ${last}</p>
+      `;
+    });
+    photoInput.addEventListener("change", () => {
+      const file = photoInput.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = () => {
+        profilePhoto.src = reader.result;
+        localStorage.setItem("profilePhoto", reader.result);
+      };
+      reader.readAsDataURL(file);
+    });
+
+    nameDisplay.addEventListener("input", () => {
+      localStorage.setItem("profileName", nameDisplay.textContent.trim());
+    });
+  </script>
+</body>
+</html>
