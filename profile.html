@@ -187,8 +187,8 @@
     <div id="nameDisplay" class="name" contenteditable="true" spellcheck="false">Ваше имя</div>
 
     <div class="stats" id="stats">
-      <p>✅ Выполнено тренировок: ...</p>
-      <p>📅 Последняя активность: ...</p>
+      <p>Выполнено тренировок: ...</p>
+      <p>Последнее: ...</p>
     </div>
 
     <div class="motivation-block">
@@ -219,6 +219,10 @@
       <i class="fa-solid fa-image"></i>
       <span>Мотивация</span>
     </div></a>
+    <a href="character.html"><div class="nav-btn">
+        <i class="fa-solid fa-shield-alt"></i>
+        <span>Характер</span>
+      </div></a>
     <a href="profile.html"><div class="nav-btn active">
       <i class="fa-solid fa-circle-user"></i>
       <span>Профиль</span>
@@ -241,8 +245,8 @@
       const log = JSON.parse(localStorage.getItem("log")) || [];
       const last = log.length ? log[log.length - 1].split(" — ")[0] : "—";
       statsEl.innerHTML = `
-        <p>✅ Выполнено тренировок: ${log.length}</p>
-        <p>📅 Последняя активность: ${last}</p>
+        <strong>Выполнено тренировок:</strong> ${log.length}<br>
+        <strong>Последнее:</strong> ${last}
       `;
     });
     photoInput.addEventListener("change", () => {
