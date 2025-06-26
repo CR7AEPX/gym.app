@@ -1,0 +1,630 @@
+<!DOCTYPE html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Тренировочный Трекер</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <style>
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+      body {
+        font-family: "Montserrat", sans-serif;
+        background: #0d0d0d;
+        color: #fff;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding: 20px;
+      }
+      h1 {
+        font-size: 2.2rem;
+        margin-bottom: 30px;
+        color: #00e676;
+        text-shadow: 0 0 5px #00e67644;
+      }
+      .days {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 15px;
+        margin-bottom: 20px;
+      }
+      .day-btn {
+        background: #181818;
+        padding: 15px 25px;
+        border-radius: 16px;
+        font-weight: 600;
+        border: 2px solid transparent;
+        cursor: pointer;
+        transition: all 0.3s ease;
+      }
+      .day-btn:hover {
+        border-color: #00e676;
+        background: #1e1e1e;
+      }
+      .workout {
+        display: none;
+        width: 100%;
+        max-width: 700px;
+        background: #1a1a1a;
+        border-radius: 18px;
+        padding: 25px;
+        border: 1px solid #333;
+        animation: slideFade 0.4s ease forwards;
+      }
+      .workout.active {
+        display: block;
+      }
+      @keyframes slideFade {
+        from {
+          opacity: 0;
+          transform: translateY(20px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+      ul {
+        margin-top: 15px;
+      }
+      ul li {
+        margin-bottom: 10px;
+        line-height: 1.6;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+      .done {
+        margin-top: 10px;
+        min-width: 100%;
+        background: #00c853;
+        padding: 12px;
+        border: none;
+        border-radius: 10px;
+        font-weight: bold;
+        color: white;
+        cursor: pointer;
+        box-shadow: 0 0 8px #00c85366;
+        transition: background 0.3s ease;
+      }
+      .done:hover {
+        background: #00b342;
+      }
+
+      .calendar {
+        margin-top: 50px;
+        width: 100%;
+        max-width: 700px;
+        background: #121212;
+        border-radius: 12px;
+        padding: 20px;
+        border: 1px solid #333;
+      }
+      .calendar h2 {
+        margin-bottom: 10px;
+        color: #00e676;
+        font-size: 1.5rem;
+      }
+      .calendar ul {
+        list-style: none;
+        padding-left: 0;
+      }
+      .calendar li {
+        padding: 10px 0;
+        border-bottom: 1px solid #2b2b2b;
+        font-size: 0.95rem;
+      }
+
+      .stats {
+        margin-top: 30px;
+        background: #181818;
+        padding: 15px;
+        border-radius: 12px;
+        border: 1px solid #333;
+        max-width: 700px;
+        width: 100%;
+        color: #ccc;
+        font-size: 0.95rem;
+      }
+
+      .weekly-goal {
+        margin-top: 40px;
+        max-width: 700px;
+        background: #181818;
+        border: 1px solid #333;
+        padding: 20px;
+        border-radius: 12px;
+        width: 100%;
+        text-align: center;
+      }
+      .weekly-goal h3 {
+        color: #00e676;
+        margin-bottom: 15px;
+      }
+      .progress-bar {
+        height: 20px;
+        background: #2a2a2a;
+        border-radius: 10px;
+        overflow: hidden;
+        margin-bottom: 10px;
+      }
+      .progress {
+        height: 100%;
+        background: #00c853;
+        width: 0%;
+        transition: width 0.3s ease;
+      }
+
+      .badges {
+        margin-top: 30px;
+        background: #181818;
+        border: 1px solid #333;
+        padding: 20px;
+        border-radius: 12px;
+        max-width: 700px;
+        width: 100%;
+      }
+      .badges h3 {
+        color: #00e676;
+        margin-bottom: 15px;
+      }
+      .badge-list {
+        display: flex;
+        gap: 15px;
+        flex-wrap: wrap;
+      }
+      .badge {
+        background: #121212;
+        padding: 10px 15px;
+        border-radius: 10px;
+        font-size: 0.9rem;
+        color: #bbb;
+        border: 1px solid #444;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        opacity: 0.4;
+        transition: 0.3s ease;
+      }
+      .badge.unlocked {
+        opacity: 1;
+        border-color: #00e676;
+        color: #fff;
+        box-shadow: 0 0 8px #00e67655;
+      }
+
+      .motivation,
+      .faq {
+        margin-top: 40px;
+        background: #181818;
+        padding: 20px;
+        border-radius: 12px;
+        border: 1px solid #333;
+        max-width: 700px;
+        width: 100%;
+      }
+      .motivation h3,
+      .faq h3 {
+        color: #00e676;
+        margin-bottom: 10px;
+      }
+      .motivation p,
+      .faq li {
+        color: #bbb;
+        line-height: 1.6;
+        margin-bottom: 10px;
+      }
+
+      .modal {
+        display: none;
+        position: fixed;
+        z-index: 9999;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.7);
+        align-items: center;
+        justify-content: center;
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity 0.3s ease;
+      }
+
+      .modal.show {
+        display: flex;
+        opacity: 1;
+        pointer-events: auto;
+      }
+
+      .modal-content {
+        background: #181818;
+        padding: 25px 30px;
+        border-radius: 16px;
+        border: 1px solid #2c2c2c;
+        text-align: center;
+        max-width: 90%;
+        width: 400px;
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.6);
+        animation: fadeInUp 0.4s ease forwards;
+      }
+
+      .modal-content.hide {
+        animation: fadeOutDown 0.3s ease forwards;
+      }
+
+      .modal-content h2 {
+        color: #00e676;
+        margin-bottom: 20px;
+      }
+
+      .modal-content button {
+        margin-top: 20px;
+        padding: 10px 20px;
+        background: #00e676;
+        color: #000;
+        font-weight: bold;
+        border: none;
+        border-radius: 10px;
+        cursor: pointer;
+        min-width: 100%;
+        transition: background 0.3s ease;
+      }
+
+      .modal-content button:hover {
+        background: #00cc5c;
+      }
+
+      @keyframes fadeInUp {
+        from {
+          opacity: 0;
+          transform: translateY(30px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      @keyframes fadeOutDown {
+        from {
+          opacity: 1;
+          transform: translateY(0);
+        }
+        to {
+          opacity: 0;
+          transform: translateY(30px);
+        }
+      }
+      @media (max-width: 600px) {
+        .day-btn {
+          padding: 12px 18px;
+          font-size: 0.9rem;
+        }
+        .workout h2 {
+          font-size: 1.2rem;
+        }
+      }
+      .app-nav {
+        position: fixed;
+        background: #121212;
+        border-top: 1px solid #222;
+        display: flex;
+        justify-content: space-around;
+        align-items: center;
+        height: 65px;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        z-index: 999;
+        padding: 0 10px;
+      }
+      .app-nav a {
+        text-decoration: none;
+      }
+      .nav-btn {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        color: #888;
+        font-size: 0.75rem;
+        transition: all 0.3s ease;
+        cursor: pointer;
+      }
+
+      .nav-btn i {
+        font-size: 1.5rem;
+        margin-bottom: 4px;
+        transition: transform 0.2s ease;
+      }
+
+      .nav-btn:hover,
+      .nav-btn.active {
+        color: #00e676;
+      }
+
+      .nav-btn.active i {
+        transform: scale(1.15);
+      }
+
+       @media (min-width: 768px) {
+        .app-nav {
+          top: 0;
+          bottom: 0;
+          left: 0;
+          width: 80px;
+          height: 100%;
+          flex-direction: column;
+          border-right: 1px solid #222;
+          border-top: none;
+          padding: 20px 0;
+        }
+
+        .nav-btn {
+          margin-bottom: 30px;
+          font-size: 0.7rem;
+        }
+
+        .nav-btn i {
+          font-size: 1.4rem;
+          margin-bottom: 6px;
+        }
+
+        .nav-btn span {
+          font-size: 0.7rem;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Твоя Неделя Прокачки</h1>
+    <div class="days">
+      <div class="day-btn" onclick="showWorkout('mon')">Понедельник</div>
+      <div class="day-btn" onclick="showWorkout('wed')">Среда</div>
+      <div class="day-btn" onclick="showWorkout('fri')">Пятница</div>
+      <div class="day-btn" onclick="showWorkout('sat')">Суббота</div>
+    </div>
+
+    <div id="mon" class="workout">
+      <h2>Понедельник — Грудь + Пресс</h2>
+      <ul>
+        <li>Отжимания обычные — 4×15</li>
+        <li>Узкие отжимания — 3×12</li>
+        <li>Отжимания с ногами на стуле — 3×10</li>
+        <li>Планка с касанием плеч — 3×30 сек</li>
+        <li>Скручивания — 3×25</li>
+        <li>Подъём ног лёжа — 3×20</li>
+      </ul>
+      <button class="done" onclick="markDone('mon')">Выполнено</button>
+    </div>
+
+    <div id="wed" class="workout">
+      <h2>Среда — Спина + Плечи</h2>
+      <ul>
+        <li>"Лодочка" — 4×30 сек</li>
+        <li>Обратные махи — 3×20</li>
+        <li>"Супермен" — 3×10</li>
+        <li>Отжимания у стены — 3×8</li>
+        <li>Боковая планка — 2×30 сек</li>
+        <li>Велосипед — 3×30 сек</li>
+      </ul>
+      <button class="done" onclick="markDone('wed')">Выполнено</button>
+    </div>
+
+    <div id="fri" class="workout">
+      <h2>Пятница — Ноги + Ягодицы</h2>
+      <ul>
+        <li>Приседания — 4×20</li>
+        <li>Выпады — 3×12</li>
+        <li>Болгарские приседания — 3×10</li>
+        <li>Ягодичный мостик — 3×20</li>
+        <li>Планка с подъёмом ноги — 3×30 сек</li>
+        <li>Скручивания вбок — 3×20</li>
+      </ul>
+      <button class="done" onclick="markDone('fri')">Выполнено</button>
+    </div>
+
+    <div id="sat" class="workout">
+      <h2>Суббота — Всё тело (функционал)</h2>
+      <ul>
+        <li>Прыжки с приседом — 30 сек</li>
+        <li>Отжимания — 12–15</li>
+        <li>Альпинист — 30 сек</li>
+        <li>Планка — 30 сек</li>
+        <li>Выпады назад — по 10</li>
+        <li>3 круга, отдых между кругами — 1 мин</li>
+      </ul>
+      <button class="done" onclick="markDone('sat')">Выполнено</button>
+    </div>
+
+    <div class="calendar">
+      <h2>Прогресс по дням</h2>
+      <ul id="log"></ul>
+    </div>
+
+    <div class="stats" id="stats"></div>
+
+    <div class="weekly-goal">
+      <h3>Цель на неделю</h3>
+      <div class="progress-bar">
+        <div class="progress" id="progress-fill"></div>
+      </div>
+      <p id="progress-text">0 из 4 тренировок выполнено</p>
+    </div>
+
+    <div class="badges">
+      <h3>Достижения</h3>
+      <div class="badge-list">
+        <div class="badge" id="badge1">
+          <i class="fas fa-fire"></i> 1 тренировка
+        </div>
+        <div class="badge" id="badge3">
+          <i class="fas fa-bolt"></i> 3 тренировки
+        </div>
+        <div class="badge" id="badge5">
+          <i class="fas fa-star"></i> 5 тренировок
+        </div>
+      </div>
+    </div>
+
+    <div class="motivation">
+      <h3>Мотивация</h3>
+      <p>
+        Никто не родился сильным — силу делает привычка. Каждый раз, когда ты
+        тренируешься, ты не просто меняешь тело. Ты меняешь характер.
+      </p>
+      <p>
+        Твоя дисциплина — твоя суперсила. Даже 20 минут в день сделают тебя на
+        100 шагов ближе к цели, чем 0 минут в неделю.
+      </p>
+    </div>
+
+    <div class="faq">
+      <h3>Полезные советы</h3>
+      <ul>
+        <li>
+          🚫 Не тренируйся на полный желудок — жди минимум 1 час после еды.
+        </li>
+        <li>
+          💧 Пей воду до, во время и после тренировки — минимум 2 литра в день.
+        </li>
+        <li>🛌 Спи 7–9 часов — это не слабость, это восстановление.</li>
+        <li>
+          📵 Не отвлекайся на соцсети во время тренировки — фокус = результат.
+        </li>
+        <li>
+          🧼 Умывай лицо прохладной водой утром и после тренировки — бодрит и
+          помогает коже.
+        </li>
+      </ul>
+    </div>
+
+    <div id="modal" class="modal">
+      <div class="modal-content">
+        <h2>🎉 Отлично!</h2>
+        <p>Ты завершил тренировку. Продолжай в том же духе!</p>
+        <button onclick="closeModal()">OK</button>
+      </div>
+    </div>
+    <nav class="app-nav">
+      <a href="index.html"><div class="nav-btn active">
+        <i class="fa-solid fa-house"></i>
+        <span>Домой</span>
+      </div></a>
+      <a href="#"><div class="nav-btn">
+        <i class="fa-solid fa-image"></i>
+        <span>Мотивация</span>
+      </div></a>
+      <a href="#"><div class="nav-btn">
+        <i class="fa-solid fa-circle-user"></i>
+        <span>Профиль</span>
+      </div></a>
+    </nav>
+    <script>
+      function showWorkout(id) {
+        document
+          .querySelectorAll(".workout")
+          .forEach((el) => el.classList.remove("active"));
+        document.getElementById(id).classList.add("active");
+      }
+
+      function markDone(day) {
+        const date = new Date().toLocaleDateString();
+        const entry = `${date} — ${dayName(day)} — ✅ Выполнено`;
+        let log = JSON.parse(localStorage.getItem("log")) || [];
+        log.push(entry);
+        localStorage.setItem("log", JSON.stringify(log));
+        renderLog();
+        renderStats();
+        updateProgress();
+        checkBadges();
+        openModal();
+      }
+
+      function renderLog() {
+        const log = JSON.parse(localStorage.getItem("log")) || [];
+        const logEl = document.getElementById("log");
+        logEl.innerHTML = "";
+        log
+          .slice(-4)
+          .reverse()
+          .forEach((entry) => {
+            const li = document.createElement("li");
+            li.textContent = entry;
+            logEl.appendChild(li);
+          });
+      }
+
+      function renderStats() {
+        const log = JSON.parse(localStorage.getItem("log")) || [];
+        const lastDate = log.length ? log[log.length - 1].split(" — ")[0] : "—";
+        document.getElementById(
+          "stats"
+        ).innerHTML = `<strong>Выполнено тренировок:</strong> ${log.length}<br><strong>Последняя:</strong> ${lastDate}`;
+      }
+
+      function dayName(code) {
+        return {
+          mon: "Понедельник",
+          wed: "Среда",
+          fri: "Пятница",
+          sat: "Суббота",
+        }[code];
+      }
+
+      function updateProgress() {
+        const log = JSON.parse(localStorage.getItem("log")) || [];
+        const uniqueDays = new Set(log.map((e) => e.split(" — ")[1]));
+        const completed = uniqueDays.size;
+        const percent = (completed / 4) * 100;
+        document.getElementById("progress-fill").style.width = percent + "%";
+        document.getElementById(
+          "progress-text"
+        ).textContent = `${completed} из 4 тренировок выполнено`;
+      }
+
+      function checkBadges() {
+        const log = JSON.parse(localStorage.getItem("log")) || [];
+        const total = log.length;
+        if (total >= 1)
+          document.getElementById("badge1").classList.add("unlocked");
+        if (total >= 3)
+          document.getElementById("badge3").classList.add("unlocked");
+        if (total >= 5)
+          document.getElementById("badge5").classList.add("unlocked");
+      }
+
+      function openModal() {
+        const modal = document.getElementById("modal");
+        const content = modal.querySelector(".modal-content");
+        content.classList.remove("hide");
+        modal.classList.add("show");
+      }
+
+      function closeModal() {
+        const modal = document.getElementById("modal");
+        const content = modal.querySelector(".modal-content");
+        content.classList.add("hide");
+        setTimeout(() => {
+          modal.classList.remove("show");
+        }, 300);
+      }
+
+      window.addEventListener("DOMContentLoaded", () => {
+        renderLog();
+        renderStats();
+        updateProgress();
+        checkBadges();
+      });
+    </script>
+  </body>
+</html>
