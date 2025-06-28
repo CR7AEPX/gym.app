@@ -15,6 +15,37 @@
       crossorigin="anonymous"
       referrerpolicy="no-referrer"
     />
+    <meta
+      name="description"
+      content="Тренировочный Трекер — прокачай тело и характер. Следи за тренировками, собирай достижения и строй привычку побеждать каждый день."
+    />
+    <meta
+      name="keywords"
+      content="тренировочный трекер, фитнес, мотивация, привычки, характер, упражнения, саморазвитие, здоровье, прогресс, сила воли"
+    />
+    <meta name="robots" content="index, follow" />
+    <link rel="canonical" href="https://cr7aepx.github.io/gym.app/" />
+
+    <meta
+      property="og:title"
+      content="Тренировочный Трекер — сила каждый день"
+    />
+    <meta
+      property="og:description"
+      content="Отмечай тренировки, следи за прогрессом, открывай достижения и развивай характер. Бесплатно и анонимно."
+    />
+    <meta property="og:url" content="https://cr7aepx.github.io/gym.app/" />
+    <meta property="og:type" content="website" />
+
+    <meta
+      name="twitter:title"
+      content="Тренировочный Трекер — строй привычку быть сильным"
+    />
+    <meta
+      name="twitter:description"
+      content="Твоя неделя. Твои тренировки. Твой характер. Каждый день — шаг к лучшему себе."
+    />
+
     <style>
       * {
         box-sizing: border-box;
@@ -86,8 +117,7 @@
           display: grid;
           grid-template-columns: repeat(2, 1fr);
         }
-
-     }
+      }
       @keyframes slideFade {
         from {
           opacity: 0;
@@ -563,9 +593,11 @@
           <span>Мотивация</span>
         </div></a
       >
-      <a href="daily-log.html"><div class="nav-btn">
-        <i class="fa-solid fa-calendar-check"></i><span>Журнал</span>
-      </div></a>
+      <a href="daily-log.html"
+        ><div class="nav-btn">
+          <i class="fa-solid fa-calendar-check"></i><span>Журнал</span>
+        </div></a
+      >
       <a href="character.html"
         ><div class="nav-btn">
           <i class="fa-solid fa-shield-alt"></i>
@@ -586,28 +618,28 @@
           .forEach((el) => el.classList.remove("active"));
         document.getElementById(id).classList.add("active");
       }
-    
+
       function markDone(day) {
-  ensureWeeklyLog();
+        ensureWeeklyLog();
 
-  const date = new Date().toLocaleDateString();
-  const entry = `${date} — ${dayName(day)} — ✅ Выполнено`;
+        const date = new Date().toLocaleDateString();
+        const entry = `${date} — ${dayName(day)} — ✅ Выполнено`;
 
-  let log = JSON.parse(localStorage.getItem("log")) || [];
-  log.push(entry);
-  localStorage.setItem("log", JSON.stringify(log));
+        let log = JSON.parse(localStorage.getItem("log")) || [];
+        log.push(entry);
+        localStorage.setItem("log", JSON.stringify(log));
 
-  let weeklyLog = JSON.parse(localStorage.getItem("weeklyLog")) || [];
-  weeklyLog.push(entry);
-  localStorage.setItem("weeklyLog", JSON.stringify(weeklyLog));
+        let weeklyLog = JSON.parse(localStorage.getItem("weeklyLog")) || [];
+        weeklyLog.push(entry);
+        localStorage.setItem("weeklyLog", JSON.stringify(weeklyLog));
 
-  renderLog();
-  renderStats();
-  updateProgress();
-  checkBadges();
-  openModal();
-}
-    
+        renderLog();
+        renderStats();
+        updateProgress();
+        checkBadges();
+        openModal();
+      }
+
       function renderLog() {
         const log = JSON.parse(localStorage.getItem("log")) || [];
         const logEl = document.getElementById("log");
@@ -621,7 +653,7 @@
             logEl.appendChild(li);
           });
       }
-    
+
       function renderStats() {
         const log = JSON.parse(localStorage.getItem("log")) || [];
         const lastDate = log.length ? log[log.length - 1].split(" — ")[0] : "—";
@@ -629,7 +661,7 @@
           "stats"
         ).innerHTML = `<strong>Выполнено тренировок:</strong> ${log.length}<br><strong>Последняя:</strong> ${lastDate}`;
       }
-    
+
       function dayName(code) {
         return {
           mon: "Понедельник",
@@ -638,7 +670,7 @@
           sat: "Суббота",
         }[code];
       }
-    
+
       function getWeekStart(date) {
         const d = new Date(date);
         const day = d.getDay() === 0 ? 7 : d.getDay();
@@ -646,32 +678,32 @@
         d.setHours(0, 0, 0, 0);
         return d.toDateString();
       }
-    
+
       function ensureWeeklyLog() {
         const today = new Date();
         const thisWeek = getWeekStart(today);
         const storedWeek = localStorage.getItem("weekStart");
-    
+
         if (storedWeek !== thisWeek) {
           localStorage.setItem("weekStart", thisWeek);
           localStorage.setItem("weeklyLog", JSON.stringify([]));
         }
       }
-    
+
       function updateProgress() {
         ensureWeeklyLog();
         const weeklyLog = JSON.parse(localStorage.getItem("weeklyLog")) || [];
-    
+
         const uniqueDays = new Set(weeklyLog.map((e) => e.split(" — ")[1]));
         const completed = uniqueDays.size;
         const percent = (completed / 4) * 100;
-    
+
         document.getElementById("progress-fill").style.width = percent + "%";
         document.getElementById(
           "progress-text"
         ).textContent = `${completed} из 4 тренировок выполнено`;
       }
-    
+
       function checkBadges() {
         const log = JSON.parse(localStorage.getItem("log")) || [];
         const total = log.length;
@@ -682,14 +714,14 @@
         if (total >= 5)
           document.getElementById("badge5").classList.add("unlocked");
       }
-    
+
       function openModal() {
         const modal = document.getElementById("modal");
         const content = modal.querySelector(".modal-content");
         content.classList.remove("hide");
         modal.classList.add("show");
       }
-    
+
       function closeModal() {
         const modal = document.getElementById("modal");
         const content = modal.querySelector(".modal-content");
@@ -698,14 +730,14 @@
           modal.classList.remove("show");
         }, 300);
       }
-    
+
       const trainingDays = [1, 3, 5, 6];
       const today = new Date().toDateString();
       const lastVisit = localStorage.getItem("lastVisit");
-    
+
       if (trainingDays.includes(new Date().getDay()) && lastVisit !== today) {
         localStorage.setItem("lastVisit", today);
-    
+
         if (Notification.permission === "granted") {
           new Notification("Пора тренироваться!", {
             body: "Не забудь сделать шаг к своей силе 💪",
@@ -722,7 +754,7 @@
           });
         }
       }
-    
+
       window.addEventListener("DOMContentLoaded", () => {
         ensureWeeklyLog();
         renderLog();
@@ -730,6 +762,6 @@
         updateProgress();
         checkBadges();
       });
-    </script>    
+    </script>
   </body>
 </html>
