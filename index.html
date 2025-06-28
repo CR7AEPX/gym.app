@@ -8,7 +8,13 @@
       href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap"
       rel="stylesheet"
     />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
+      integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
     <style>
       * {
         box-sizing: border-box;
@@ -30,6 +36,11 @@
         color: #00e676;
         text-shadow: 0 0 5px #00e67644;
       }
+      @media (max-width: 480px) {
+        h1 {
+          font-size: 26px;
+        }
+      }
       .days {
         display: flex;
         flex-wrap: wrap;
@@ -39,12 +50,19 @@
       }
       .day-btn {
         background: #181818;
-        padding: 15px 40px;
         border-radius: 16px;
         font-weight: 600;
         border: 2px solid transparent;
         cursor: pointer;
         transition: all 0.3s ease;
+        flex: 1 0 auto;
+        width: 165px;
+        height: 58px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        box-sizing: border-box;
       }
       .day-btn:hover {
         border-color: #00e676;
@@ -63,6 +81,13 @@
       .workout.active {
         display: block;
       }
+      @media (max-width: 600px) {
+        .days {
+          display: grid;
+          grid-template-columns: repeat(2, 1fr);
+        }
+
+     }
       @keyframes slideFade {
         from {
           opacity: 0;
@@ -356,7 +381,7 @@
         transform: scale(1.15);
       }
 
-       @media (min-width: 768px) {
+      @media (min-width: 768px) {
         .app-nav {
           top: 0;
           bottom: 0;
@@ -526,22 +551,30 @@
       </div>
     </div>
     <nav class="app-nav">
-      <a href="index.html"><div class="nav-btn active">
-        <i class="fa-solid fa-house"></i>
-        <span>Домой</span>
-      </div></a>
-      <a href="motivation.html"><div class="nav-btn">
-        <i class="fa-solid fa-image"></i>
-        <span>Мотивация</span>
-      </div></a>
-      <a href="character.html"><div class="nav-btn">
-        <i class="fa-solid fa-shield-alt"></i>
-        <span>Характер</span>
-      </div></a>
-      <a href="profile.html"><div class="nav-btn">
-        <i class="fa-solid fa-circle-user"></i>
-        <span>Профиль</span>
-      </div></a>
+      <a href="index.html"
+        ><div class="nav-btn active">
+          <i class="fa-solid fa-house"></i>
+          <span>Домой</span>
+        </div></a
+      >
+      <a href="motivation.html"
+        ><div class="nav-btn">
+          <i class="fa-solid fa-image"></i>
+          <span>Мотивация</span>
+        </div></a
+      >
+      <a href="character.html"
+        ><div class="nav-btn">
+          <i class="fa-solid fa-shield-alt"></i>
+          <span>Характер</span>
+        </div></a
+      >
+      <a href="profile.html"
+        ><div class="nav-btn">
+          <i class="fa-solid fa-circle-user"></i>
+          <span>Профиль</span>
+        </div></a
+      >
     </nav>
     <script>
       function showWorkout(id) {
@@ -550,20 +583,28 @@
           .forEach((el) => el.classList.remove("active"));
         document.getElementById(id).classList.add("active");
       }
-
+    
       function markDone(day) {
-        const date = new Date().toLocaleDateString();
-        const entry = `${date} — ${dayName(day)} — ✅ Выполнено`;
-        let log = JSON.parse(localStorage.getItem("log")) || [];
-        log.push(entry);
-        localStorage.setItem("log", JSON.stringify(log));
-        renderLog();
-        renderStats();
-        updateProgress();
-        checkBadges();
-        openModal();
-      }
+  ensureWeeklyLog();
 
+  const date = new Date().toLocaleDateString();
+  const entry = `${date} — ${dayName(day)} — ✅ Выполнено`;
+
+  let log = JSON.parse(localStorage.getItem("log")) || [];
+  log.push(entry);
+  localStorage.setItem("log", JSON.stringify(log));
+
+  let weeklyLog = JSON.parse(localStorage.getItem("weeklyLog")) || [];
+  weeklyLog.push(entry);
+  localStorage.setItem("weeklyLog", JSON.stringify(weeklyLog));
+
+  renderLog();
+  renderStats();
+  updateProgress();
+  checkBadges();
+  openModal();
+}
+    
       function renderLog() {
         const log = JSON.parse(localStorage.getItem("log")) || [];
         const logEl = document.getElementById("log");
@@ -577,7 +618,7 @@
             logEl.appendChild(li);
           });
       }
-
+    
       function renderStats() {
         const log = JSON.parse(localStorage.getItem("log")) || [];
         const lastDate = log.length ? log[log.length - 1].split(" — ")[0] : "—";
@@ -585,7 +626,7 @@
           "stats"
         ).innerHTML = `<strong>Выполнено тренировок:</strong> ${log.length}<br><strong>Последняя:</strong> ${lastDate}`;
       }
-
+    
       function dayName(code) {
         return {
           mon: "Понедельник",
@@ -594,18 +635,40 @@
           sat: "Суббота",
         }[code];
       }
-
+    
+      function getWeekStart(date) {
+        const d = new Date(date);
+        const day = d.getDay() === 0 ? 7 : d.getDay();
+        d.setDate(d.getDate() - day + 1);
+        d.setHours(0, 0, 0, 0);
+        return d.toDateString();
+      }
+    
+      function ensureWeeklyLog() {
+        const today = new Date();
+        const thisWeek = getWeekStart(today);
+        const storedWeek = localStorage.getItem("weekStart");
+    
+        if (storedWeek !== thisWeek) {
+          localStorage.setItem("weekStart", thisWeek);
+          localStorage.setItem("weeklyLog", JSON.stringify([]));
+        }
+      }
+    
       function updateProgress() {
-        const log = JSON.parse(localStorage.getItem("log")) || [];
-        const uniqueDays = new Set(log.map((e) => e.split(" — ")[1]));
+        ensureWeeklyLog();
+        const weeklyLog = JSON.parse(localStorage.getItem("weeklyLog")) || [];
+    
+        const uniqueDays = new Set(weeklyLog.map((e) => e.split(" — ")[1]));
         const completed = uniqueDays.size;
         const percent = (completed / 4) * 100;
+    
         document.getElementById("progress-fill").style.width = percent + "%";
         document.getElementById(
           "progress-text"
         ).textContent = `${completed} из 4 тренировок выполнено`;
       }
-
+    
       function checkBadges() {
         const log = JSON.parse(localStorage.getItem("log")) || [];
         const total = log.length;
@@ -616,14 +679,14 @@
         if (total >= 5)
           document.getElementById("badge5").classList.add("unlocked");
       }
-
+    
       function openModal() {
         const modal = document.getElementById("modal");
         const content = modal.querySelector(".modal-content");
         content.classList.remove("hide");
         modal.classList.add("show");
       }
-
+    
       function closeModal() {
         const modal = document.getElementById("modal");
         const content = modal.querySelector(".modal-content");
@@ -632,13 +695,38 @@
           modal.classList.remove("show");
         }, 300);
       }
-
+    
+      const trainingDays = [1, 3, 5, 6];
+      const today = new Date().toDateString();
+      const lastVisit = localStorage.getItem("lastVisit");
+    
+      if (trainingDays.includes(new Date().getDay()) && lastVisit !== today) {
+        localStorage.setItem("lastVisit", today);
+    
+        if (Notification.permission === "granted") {
+          new Notification("Пора тренироваться!", {
+            body: "Не забудь сделать шаг к своей силе 💪",
+            icon: "https://cdn-icons-png.flaticon.com/512/924/924915.png",
+          });
+        } else if (Notification.permission !== "denied") {
+          Notification.requestPermission().then((permission) => {
+            if (permission === "granted") {
+              new Notification("Пора тренироваться!", {
+                body: "Не забудь сделать шаг к своей силе 💪",
+                icon: "https://cdn-icons-png.flaticon.com/512/924/924915.png",
+              });
+            }
+          });
+        }
+      }
+    
       window.addEventListener("DOMContentLoaded", () => {
+        ensureWeeklyLog();
         renderLog();
         renderStats();
         updateProgress();
         checkBadges();
       });
-    </script>
+    </script>    
   </body>
 </html>

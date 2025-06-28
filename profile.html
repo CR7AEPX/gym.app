@@ -1,268 +1,404 @@
 <!DOCTYPE html>
 <html lang="ru">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Профиль</title>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
-  <style>
-    body {
-      background: #0d0d0d;
-      color: #fff;
-      font-family: 'Montserrat', sans-serif;
-      padding: 20px;
-      padding-bottom: 80px;
-    }
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Профиль</title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+    />
+    <style>
+      body {
+        background: #0d0d0d;
+        color: #fff;
+        font-family: "Montserrat", sans-serif;
+        padding: 20px;
+        padding-bottom: 80px;
+      }
 
-    h1 {
-      text-align: center;
-      color: #00e676;
-      margin-bottom: 25px;
-    }
+      h1 {
+        text-align: center;
+        color: #00e676;
+        margin-bottom: 25px;
+      }
 
-    .profile {
-      max-width: 600px;
-      margin: 0 auto;
-      text-align: center;
-    }
+      .profile {
+        max-width: 600px;
+        margin: 0 auto;
+        text-align: center;
+      }
 
-    .photo-block {
-      position: relative;
-      width: 140px;
-      height: 140px;
-      margin: 0 auto 15px;
-      border-radius: 50%;
-      overflow: hidden;
-      border: 3px solid #00e676;
-      background: #000;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
+      .photo-block {
+        position: relative;
+        width: 140px;
+        height: 140px;
+        margin: 0 auto 15px;
+        border-radius: 50%;
+        overflow: hidden;
+        border: 3px solid #00e676;
+        background: #000;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
 
-    .photo-block img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      border-radius: 50%;
-    }
+      .photo-block img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        border-radius: 50%;
+      }
 
-    .photo-block input {
-      display: none;
-    }
+      .photo-block input {
+        display: none;
+      }
 
-    .photo-block::after {
-      content: '+';
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      color: #00e676;
-      font-size: 2.6rem;
-      display: none;
-    }
+      .photo-block::after {
+        content: "+";
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        color: #00e676;
+        font-size: 2.6rem;
+        display: none;
+      }
 
-    .photo-block:hover::after {
-      display: block;
-    }
+      .photo-block:hover::after {
+        display: block;
+      }
 
-    .name {
-      font-size: 1.4rem;
-      color: #fff;
-      margin-bottom: 25px;
-      outline: none;
-      border-radius: 8px;
-      padding: 5px 10px;
-      display: inline-block;
-    }
+      .name {
+        font-size: 1.4rem;
+        color: #fff;
+        margin-bottom: 25px;
+        outline: none;
+        border-radius: 8px;
+        padding: 5px 10px;
+        display: inline-block;
+      }
 
-    .stats {
-      background: #181818;
-      padding: 15px;
-      border-radius: 12px;
-      border: 1px solid #333;
-      margin-bottom: 25px;
-      text-align: left;
-    }
+      .stats {
+        background: #181818;
+        padding: 15px;
+        border-radius: 12px;
+        border: 1px solid #333;
+        margin-bottom: 25px;
+        text-align: left;
+      }
 
-    .stats p {
-      margin: 10px 0;
-    }
+      .stats p {
+        margin: 10px 0;
+      }
 
-    .motivation-block {
-      background: #181818;
-      padding: 20px;
-      border-radius: 12px;
-      border: 1px solid #333;
-      line-height: 1.6;
-      color: #ccc;
-      font-size: 0.95rem;
-      white-space: pre-wrap;
-      text-align: left;
-    }
+      .motivation-block {
+        background: #181818;
+        padding: 20px 20px;
+        border-radius: 12px;
+        border: 1px solid #333;
+        line-height: 1.6;
+        color: #ccc;
+        font-size: 0.95rem;
+        text-align: left;
+      }
 
-    .app-nav {
-      position: fixed;
-      background: #121212;
-      border-top: 1px solid #222;
-      display: flex;
-      justify-content: space-around;
-      align-items: center;
-      height: 65px;
-      bottom: 0;
-      left: 0;
-      right: 0;
-      z-index: 999;
-      padding: 0 10px;
-    }
-
-    .app-nav a {
-      text-decoration: none;
-    }
-
-    .nav-btn {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      color: #888;
-      font-size: 0.75rem;
-      transition: all 0.3s ease;
-      cursor: pointer;
-    }
-
-    .nav-btn i {
-      font-size: 1.5rem;
-      margin-bottom: 4px;
-      transition: transform 0.2s ease;
-    }
-
-    .nav-btn:hover,
-    .nav-btn.active {
-      color: #00e676;
-    }
-
-    .nav-btn.active i {
-      transform: scale(1.15);
-    }
-
-    @media (min-width: 768px) {
       .app-nav {
-        top: 0;
+        position: fixed;
+        background: #121212;
+        border-top: 1px solid #222;
+        display: flex;
+        justify-content: space-around;
+        align-items: center;
+        height: 65px;
         bottom: 0;
         left: 0;
-        width: 80px;
-        height: 100%;
-        flex-direction: column;
-        border-right: 1px solid #222;
-        border-top: none;
-        padding: 20px 0;
+        right: 0;
+        z-index: 999;
+        padding: 0 10px;
+      }
+
+      .app-nav a {
+        text-decoration: none;
       }
 
       .nav-btn {
-        margin-bottom: 30px;
-        font-size: 0.7rem;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        color: #888;
+        font-size: 0.75rem;
+        transition: all 0.3s ease;
+        cursor: pointer;
       }
 
       .nav-btn i {
+        font-size: 1.5rem;
+        margin-bottom: 4px;
+        transition: transform 0.2s ease;
+      }
+
+      .nav-btn:hover,
+      .nav-btn.active {
+        color: #00e676;
+      }
+
+      .nav-btn.active i {
+        transform: scale(1.15);
+      }
+
+      @media (min-width: 768px) {
+        .app-nav {
+          top: 0;
+          bottom: 0;
+          left: 0;
+          width: 80px;
+          height: 100%;
+          flex-direction: column;
+          border-right: 1px solid #222;
+          border-top: none;
+          padding: 20px 0;
+        }
+
+        .nav-btn {
+          margin-bottom: 30px;
+          font-size: 0.7rem;
+        }
+
+        .nav-btn i {
+          font-size: 1.4rem;
+          margin-bottom: 6px;
+        }
+
+        .nav-btn span {
+          font-size: 0.7rem;
+        }
+      }
+      .delete-btn {
+        position: absolute;
+        top: 20px;
+        right: 20px;
+        background: transparent;
+        color: #00e676;
+        border: none;
         font-size: 1.4rem;
-        margin-bottom: 6px;
+        cursor: pointer;
+        transition: 0.2s ease;
+        padding: 8px;
+      }
+      .delete-btn:hover {
+        border-radius: 5px;
+        background-color: #003e20cd;
       }
 
-      .nav-btn span {
-        font-size: 0.7rem;
+      .delete-modal {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.8);
+        display: none;
+        justify-content: center;
+        align-items: center;
+        z-index: 9999;
       }
-    }
-  </style>
-</head>
-<body>
-  <h1>Профиль</h1>
-
-  <div class="profile">
-    <label class="photo-block">
-      <img id="profilePhoto" src="" />
-      <input type="file" id="photoInput" accept="image/*" />
-    </label>
-
-    <div id="nameDisplay" class="name" contenteditable="true" spellcheck="false">Ваше имя</div>
-
-    <div class="stats" id="stats">
-      <p>Выполнено тренировок: ...</p>
-      <p>Последнее: ...</p>
+      .delete-modal.show {
+        display: flex;
+      }
+      .delete-modal-content {
+        background: #181818;
+        padding: 25px 30px;
+        border-radius: 12px;
+        border: 1px solid #333;
+        text-align: center;
+        color: #fff;
+        max-width: 300px;
+      }
+      .modal-actions .btn {
+        padding: 10px 0;
+        min-width: 45%;
+        border-radius: 6px;
+        font-weight: bold;
+        border: none;
+        cursor: pointer;
+        transition: all 0.2s ease;
+      }
+      .modal-actions {
+        gap: 20px;
+        display: flex;
+        justify-content: center;
+      }
+      .modal-actions .btn.confirm {
+        background: #00e676;
+        color: #000;
+      }
+      .modal-actions .btn.cancel {
+        background: #333;
+        color: #fff;
+      }
+      .modal-actions .btn:hover {
+        opacity: 0.85;
+      }
+      @keyframes modalFadeIn {
+        from {
+          opacity: 0;
+          transform: scale(0.9);
+        }
+        to {
+          opacity: 1;
+          transform: scale(1);
+        }
+      }
+      @keyframes modalFadeOut {
+        from {
+          opacity: 1;
+          transform: scale(1);
+        }
+        to {
+          opacity: 0;
+          transform: scale(0.9);
+        }
+      }
+      .delete-modal-content {
+        animation: modalFadeIn 0.25s ease forwards;
+      }
+      .delete-modal.hide .delete-modal-content {
+        animation: modalFadeOut 0.25s ease forwards;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Профиль</h1>
+    <button class="delete-btn" onclick="openDeleteModal()">
+      <i class="fa-solid fa-trash"></i>
+    </button>
+    <div class="delete-modal" id="deleteModal">
+      <div class="delete-modal-content">
+        <p>Удалить все данные профиля?</p>
+        <div class="modal-actions">
+          <button class="btn cancel" onclick="closeDeleteModal()">Нет</button>
+          <button class="btn confirm" onclick="confirmDelete()">Да</button>
+        </div>
+      </div>
     </div>
 
-    <div class="motivation-block">
-Ты живёшь не ради того, чтобы просто быть.
-Ты живёшь, чтобы стать сильнее, глубже, увереннее.
-Ты видел боль, ты знаешь, что такое тьма, но ты решил идти вперёд — не из страха, а из принципа.
+    <div class="profile">
+      <label class="photo-block">
+        <img id="profilePhoto" src="" />
+        <input type="file" id="photoInput" accept="image/*" />
+      </label>
 
-Каждый раз, когда ты нажимаешь “Выполнено” — это не просто галочка.
-Это удар по слабости, это шаг против лени, это доказательство себе:
+      <div
+        id="nameDisplay"
+        class="name"
+        contenteditable="true"
+        spellcheck="false"
+      >
+        Ваше имя
+      </div>
 
-"Я — не случайный человек. Я — человек, который делает."
+      <div class="stats" id="stats">
+        <p>Выполнено тренировок: ...</p>
+        <p>Последнее: ...</p>
+      </div>
 
-Ты не строишь тело. Ты строишь стержень.
-С каждым подходом, с каждой каплей пота — ты приближаешься к тому,
-кем хочешь стать: сильным, спокойным, дисциплинированным мужчиной,
-перед которым не устоит ни страх, ни слабость, ни сомнение.
-
-Ты начал. Значит, ты уже другой. Остальное — вопрос времени.
+      <div class="motivation-block">
+        Ты живёшь не ради того, чтобы просто быть. Ты живёшь, чтобы стать
+        сильнее, глубже, увереннее. Ты видел боль, ты знаешь, что такое тьма, но
+        ты решил идти вперёд — не из страха, а из принципа. Каждый раз, когда ты
+        нажимаешь “Выполнено” — это не просто галочка. Это удар по слабости, это
+        шаг против лени, это доказательство себе: "Я — не случайный человек. Я —
+        человек, который делает." Ты не строишь тело. Ты строишь стержень. С
+        каждым подходом, с каждой каплей пота — ты приближаешься к тому, кем
+        хочешь стать: сильным, спокойным, дисциплинированным мужчиной, перед
+        которым не устоит ни страх, ни слабость, ни сомнение. Ты начал. Значит,
+        ты уже другой. Остальное — вопрос времени.
+      </div>
     </div>
-  </div>
 
-  <nav class="app-nav">
-    <a href="index.html"><div class="nav-btn">
-      <i class="fa-solid fa-house"></i>
-      <span>Домой</span>
-    </div></a>
-    <a href="motivation.html"><div class="nav-btn">
-      <i class="fa-solid fa-image"></i>
-      <span>Мотивация</span>
-    </div></a>
-    <a href="character.html"><div class="nav-btn">
-        <i class="fa-solid fa-shield-alt"></i>
-        <span>Характер</span>
-      </div></a>
-    <a href="profile.html"><div class="nav-btn active">
-      <i class="fa-solid fa-circle-user"></i>
-      <span>Профиль</span>
-    </div></a>
-  </nav>
+    <nav class="app-nav">
+      <a href="index.html"
+        ><div class="nav-btn">
+          <i class="fa-solid fa-house"></i>
+          <span>Домой</span>
+        </div></a
+      >
+      <a href="motivation.html"
+        ><div class="nav-btn">
+          <i class="fa-solid fa-image"></i>
+          <span>Мотивация</span>
+        </div></a
+      >
+      <a href="character.html"
+        ><div class="nav-btn">
+          <i class="fa-solid fa-shield-alt"></i>
+          <span>Характер</span>
+        </div></a
+      >
+      <a href="profile.html"
+        ><div class="nav-btn active">
+          <i class="fa-solid fa-circle-user"></i>
+          <span>Профиль</span>
+        </div></a
+      >
+    </nav>
 
-  <script>
-    const photoInput = document.getElementById("photoInput");
-    const profilePhoto = document.getElementById("profilePhoto");
-    const nameDisplay = document.getElementById("nameDisplay");
-    const statsEl = document.getElementById("stats");
+    <script>
+      const photoInput = document.getElementById("photoInput");
+      const profilePhoto = document.getElementById("profilePhoto");
+      const nameDisplay = document.getElementById("nameDisplay");
+      const statsEl = document.getElementById("stats");
 
-    window.addEventListener("DOMContentLoaded", () => {
-      const savedPhoto = localStorage.getItem("profilePhoto");
-      if (savedPhoto) profilePhoto.src = savedPhoto;
+      window.addEventListener("DOMContentLoaded", () => {
+        const savedPhoto = localStorage.getItem("profilePhoto");
+        if (savedPhoto) profilePhoto.src = savedPhoto;
 
-      const savedName = localStorage.getItem("profileName");
-      if (savedName) nameDisplay.textContent = savedName;
+        const savedName = localStorage.getItem("profileName");
+        if (savedName) nameDisplay.textContent = savedName;
 
-      const log = JSON.parse(localStorage.getItem("log")) || [];
-      const last = log.length ? log[log.length - 1].split(" — ")[0] : "—";
-      statsEl.innerHTML = `
+        const log = JSON.parse(localStorage.getItem("log")) || [];
+        const last = log.length ? log[log.length - 1].split(" — ")[0] : "—";
+        statsEl.innerHTML = `
         <strong>Выполнено тренировок:</strong> ${log.length}<br>
         <strong>Последнее:</strong> ${last}
       `;
-    });
-    photoInput.addEventListener("change", () => {
-      const file = photoInput.files[0];
-      if (!file) return;
-      const reader = new FileReader();
-      reader.onload = () => {
-        profilePhoto.src = reader.result;
-        localStorage.setItem("profilePhoto", reader.result);
-      };
-      reader.readAsDataURL(file);
-    });
+      });
+      photoInput.addEventListener("change", () => {
+        const file = photoInput.files[0];
+        if (!file) return;
+        const reader = new FileReader();
+        reader.onload = () => {
+          profilePhoto.src = reader.result;
+          localStorage.setItem("profilePhoto", reader.result);
+        };
+        reader.readAsDataURL(file);
+      });
 
-    nameDisplay.addEventListener("input", () => {
-      localStorage.setItem("profileName", nameDisplay.textContent.trim());
-    });
-  </script>
-</body>
+      nameDisplay.addEventListener("input", () => {
+        localStorage.setItem("profileName", nameDisplay.textContent.trim());
+      });
+      function openDeleteModal() {
+        const modal = document.getElementById("deleteModal");
+        modal.style.display = "flex";
+        modal.classList.remove("hide");
+        modal.classList.add("show");
+      }
+      function closeDeleteModal() {
+        const modal = document.getElementById("deleteModal");
+        modal.classList.remove("show");
+        modal.classList.add("hide");
+        setTimeout(() => {
+          modal.classList.remove("hide");
+          modal.style.display = "none";
+        }, 250);
+      }
+
+      function confirmDelete() {
+        localStorage.clear();
+        location.reload();
+      }
+    </script>
+  </body>
 </html>
