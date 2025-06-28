@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://cr7aepx.github.io/gym.app/sitemap.xml
