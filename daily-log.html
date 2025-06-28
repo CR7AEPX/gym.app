@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Что ты сделал сегодня?</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+  <style>
+    body {
+      background: #0d0d0d;
+      color: #fff;
+      font-family: 'Montserrat', sans-serif;
+      padding: 20px;
+      padding-bottom: 80px;
+      margin: 0;
+    }
+
+    h1 {
+      text-align: center;
+      color: #00e676;
+      margin-bottom: 25px;
+      font-weight: 700;
+      font-size: 1.5rem;
+      text-shadow: 0 0 5px #00e67644;
+    }
+
+    .container {
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    .add-btn {
+      display: block;
+      margin: 0 auto 20px;
+      background: #00e676;
+      color: #000;
+      border: none;
+      padding: 12px 22px;
+      font-weight: bold;
+      border-radius: 30px;
+      font-size: 1rem;
+      cursor: pointer;
+      margin-bottom: 25px;
+      box-shadow: 1px 2px 12px #00e67769;
+      transition: 0.3s ease;
+    }
+
+    .add-btn:hover {
+      background: #00db58;
+    }
+
+    .log-list {
+      background: #181818;
+      border: 1px solid #333;
+      border-radius: 12px;
+      padding: 18px 22px;
+      color: #ccc;
+      font-size: 1rem;
+      margin-bottom: 30px;
+      max-height: 300px;
+      overflow-y: auto;
+    }
+
+    .log-list .entry {
+      margin-bottom: 14px;
+      user-select: text;
+      border-left: 4px solid transparent;
+      padding-left: 10px;
+    }
+
+    .log-list .entry.done {
+      border-color: #00e676;
+    }
+
+    .log-list .entry.not-done {
+      border-color: #e60023;
+    }
+
+    .log-list .entry .date {
+      color: #00e676;
+      font-weight: bold;
+      margin-right: 6px;
+    }
+
+    .stats, .quote {
+      background: #181818;
+      border: 1px solid #333;
+      border-radius: 12px;
+      padding: 16px 22px;
+      font-size: 0.95rem;
+      color: #ccc;
+      line-height: 1.6;
+      margin-bottom: 15px;
+    }
+
+    .quote {
+      font-style: italic;
+      text-align: center;
+      opacity: 0.8;
+    }
+
+    .modal {
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(0, 0, 0, 0.85);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 9999;
+      padding: 15px;
+    }
+
+    .modal.show {
+      display: flex;
+      animation: fadeIn 0.3s ease forwards;
+    }
+
+    .modal-content {
+      background: #181818;
+      padding: 25px 30px;
+      border-radius: 14px;
+      max-width: 420px;
+      width: 100%;
+      text-align: center;
+      animation: slideDownModal 0.4s ease forwards;
+    }
+
+    .modal-content textarea {
+      width: 94%;
+      min-height: 90px;
+      border-radius: 10px;
+      border: 1px solid #333;
+      background: #121212;
+      color: #eee;
+      font-size: 1rem;
+      padding: 10px 12px;
+      margin-top: 15px;
+      font-family: 'Montserrat', sans-serif;
+      resize: vertical;
+    }
+
+    .modal-buttons {
+      display: flex;
+      gap: 10px;
+      margin-top: 18px;
+    }
+
+    .modal-buttons button {
+      flex: 1;
+      padding: 10px 20px;
+      font-size: 1rem;
+      font-weight: 700;
+      border: none;
+      border-radius: 30px;
+      cursor: pointer;
+      background: #00e676;
+      color: #000;
+      box-shadow: 1px 2px 12px #00e67769;
+      transition: background 0.3s ease;
+    }
+
+    .modal-buttons button:hover {
+      background: #00db58;
+    }
+
+    @keyframes fadeIn {
+      from {opacity: 0}
+      to {opacity: 1}
+    }
+
+    @keyframes slideDownModal {
+      from {transform: translateY(-20px); opacity: 0}
+      to {transform: translateY(0); opacity: 1}
+    }
+
+    .app-nav {
+      position: fixed;
+      background: #121212;
+      border-top: 1px solid #222;
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      height: 65px;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      z-index: 999;
+      padding: 0 10px;
+    }
+
+    .app-nav a {
+      text-decoration: none;
+    }
+
+    .nav-btn {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      color: #888;
+      font-size: 0.75rem;
+      transition: all 0.3s ease;
+    }
+
+    .nav-btn i {
+      font-size: 1.5rem;
+      margin-bottom: 4px;
+    }
+
+    .nav-btn:hover,
+    .nav-btn.active {
+      color: #00e676;
+    }
+
+    .nav-btn.active i {
+      transform: scale(1.15);
+    }
+
+    @media (min-width: 768px) {
+      .app-nav {
+        top: 0;
+        bottom: 0;
+        left: 0;
+        width: 80px;
+        height: 100%;
+        flex-direction: column;
+        border-right: 1px solid #222;
+        border-top: none;
+        padding: 20px 0;
+      }
+
+      .nav-btn {
+        margin-bottom: 30px;
+        font-size: 0.7rem;
+      }
+
+      .nav-btn i {
+        font-size: 1.4rem;
+        margin-bottom: 6px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Что ты сделал сегодня?</h1>
+
+  <div class="container">
+    <button class="add-btn" onclick="openModal()">Добавить отметку</button>
+
+    <div class="log-list" id="entries"></div>
+
+    <div class="stats" id="stats"></div>
+    <div class="quote" id="quote"></div>
+  </div>
+
+  <div class="modal" id="modal">
+    <div class="modal-content">
+      <h2 style="color:#00e676; margin-bottom:10px;">Отметь свой день</h2>
+      <textarea id="commentInput" placeholder="Комментарий (необязательно)"></textarea>
+      <div class="modal-buttons">
+        <button onclick="submitEntry(true)">Я сделал</button>
+        <button onclick="submitEntry(false)">Я не сделал</button>
+      </div>
+    </div>
+  </div>
+
+  <nav class="app-nav">
+    <a href="index.html"><div class="nav-btn">
+      <i class="fa-solid fa-house"></i><span>Домой</span>
+    </div></a>
+    <a href="motivation.html"><div class="nav-btn">
+      <i class="fa-solid fa-image"></i><span>Мотивация</span>
+    </div></a>
+    <a href="daily-log.html"><div class="nav-btn">
+        <i class="fa-solid fa-calendar-check"></i><span>Журнал</span>
+      </div></a>
+    <a href="character.html"><div class="nav-btn">
+      <i class="fa-solid fa-shield-alt"></i><span>Характер</span>
+    </div></a>
+    <a href="profile.html"><div class="nav-btn">
+      <i class="fa-solid fa-circle-user"></i><span>Профиль</span>
+    </div></a>
+  </nav>
+  <script>
+    const modal = document.getElementById('modal');
+    const commentInput = document.getElementById('commentInput');
+    const entriesContainer = document.getElementById('entries');
+    const statsEl = document.getElementById('stats');
+    const quoteEl = document.getElementById('quote');
+
+    const QUOTES_GOOD = [
+      "Ты создаешь импульс. Продолжай в том же духе!",
+      "Каждое усилие делает тебя сильнее.",
+      "Маленькие шаги ведут к большим изменениям.",
+      "Ты на правильном пути. Гордишься собой?"
+    ];
+
+    const QUOTES_BAD = [
+      "Не сдавайся. Даже одна попытка — это движение вперёд.",
+      "Ты можешь начать заново. Прямо сейчас.",
+      "Настоящая сила — в возвращении после падения.",
+      "Твоя история только начинается. Действуй."
+    ];
+
+    let data = JSON.parse(localStorage.getItem("dailyMarks")) || [];
+
+    function openModal() {
+      commentInput.value = "";
+      modal.classList.add("show");
+    }
+
+    function submitEntry(success) {
+      const comment = commentInput.value.trim();
+      const date = new Date().toLocaleDateString("ru-RU");
+
+      const entry = { date, success, comment };
+      data = data.filter(e => e.date !== date);
+      data.push(entry);
+
+      localStorage.setItem("dailyMarks", JSON.stringify(data));
+      modal.classList.remove("show");
+      renderEntries();
+    }
+
+    function renderEntries() {
+      entriesContainer.innerHTML = "";
+      data.slice().reverse().forEach(entry => {
+        const div = document.createElement("div");
+        div.className = `entry ${entry.success ? "done" : "not-done"}`;
+        div.innerHTML = `
+          <div class="date">🗓 ${entry.date}</div>
+          <div>${entry.success ? "✔" : "✘"}${entry.comment ? ` — ${entry.comment}` : ""}</div>
+        `;
+        entriesContainer.appendChild(div);
+      });
+
+      const total = data.length;
+      const done = data.filter(e => e.success).length;
+      const notDone = total - done;
+
+      statsEl.innerHTML = `
+        <strong>Всего дней:</strong> ${total}<br>
+        <strong>Сделал:</strong> ${done}<br>
+        <strong>Не сделал:</strong> ${notDone}
+      `;
+
+      if (done >= 5 && notDone < 3) {
+        quoteEl.textContent = QUOTES_GOOD[Math.floor(Math.random() * QUOTES_GOOD.length)];
+      } else if (notDone >= 5 && done < 3) {
+        quoteEl.textContent = QUOTES_BAD[Math.floor(Math.random() * QUOTES_BAD.length)];
+      } else {
+        quoteEl.textContent = "Действуй. Прямо сейчас!";
+      }
+    }
+
+    window.addEventListener("DOMContentLoaded", renderEntries);
+  </script>
+</body>
+</html>
